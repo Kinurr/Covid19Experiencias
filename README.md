@@ -1,2 +1,1 @@
-# CovidExperiencias
 # Covid19Experiencias
