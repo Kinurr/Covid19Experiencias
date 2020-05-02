@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="pt">
+<meta charset="UTF-8">
+<head>
+    {% block title %} Experiências - Índice {% endblock %}
+</head>
+<body>
+{% block body %}
+    <br>
+    <div class="container">
+        <div class="d-flex justify-content-end">
+            <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar
+                Experiência</a>
+        </div>
+        <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+            {% for user_post in user_post_list %}
+                <div class="col-md-3 col-sm post-card">
+                    <div class="thumbnail">
+                        <img src="{{ user_post.img }}">
+                        <div class="caption">
+                            <h4><a class="btn" href="{% url 'experiencias:userpost' user_post.id %}">{{ user_post.title }}</a></h4>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

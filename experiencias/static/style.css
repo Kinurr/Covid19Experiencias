@@ -1,0 +1,79 @@
+head {
+    color: white;
+}
+
+body {
+    background-color: #f4eeff;
+    font-family: Lato;
+}
+
+.navbar {
+    background-color: #A6B1E1;
+    color: white;
+}
+
+.navbar a {
+    color: white;
+}
+
+.navbar a:hover {
+    color: #6b7cc8;
+    text-decoration: none;
+}
+
+.thumbnail {
+    padding: 0;
+}
+
+.thumbnail img {
+    width: 100%;
+    object-fit: cover;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+}
+
+.post-card .btn {
+    font-size: 24px;
+}
+
+.caption a {
+    color: dimgrey;
+}
+
+.caption a:hover {
+    color: darkgrey;
+    text-decoration: none;
+}
+
+.btn:focus,.btn:active {
+   outline: none !important;
+   box-shadow: none;
+}
+
+.post-maximized {
+    padding-top: 20px;
+}
+
+.img-responsive {
+    max-width: 1000px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+}
+
+.caption-full {
+    padding-top: 20px;
+}
+
+.btn-exp {
+    background-color: #A6B1E1;
+    color: white;
+    margin-bottom: 25px;
+}
+
+.btn-exp:hover {
+    color: #6b7cc8;
+    text-decoration: none;
+}
+

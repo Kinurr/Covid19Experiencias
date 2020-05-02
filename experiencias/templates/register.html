@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="pt">
+<meta charset="UTF-8">
+<head>
+
+    <title>
+        {% block title %} Criar Conta {% endblock %}
+    </title>
+
+</head>
+<body>
+{% block body %}
+    <br>
+    <div class="container d-flex justify-content-center">
+        <div class="w-50">
+            <div class="d-flex justify-content-center">
+                <h2>Criar Conta</h2>
+            </div>
+            <hr>
+            <form action="{% url 'experiencias:registeruser' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Nome de utilizador:</label>
+                    <input type="text" class="form-control" name="user_name" id="user_name" placeholder="Utilizador">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="exemple@exemplo.com">
+                </div>
+                <div class="form-group">
+                    <label>Palavra Passe</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="p4ssw0rd!">
+                </div>
+                <br>
+                <div class="d-flex justify-content-end">
+                    <input type="submit" class="btn btn-exp" value="Registar">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

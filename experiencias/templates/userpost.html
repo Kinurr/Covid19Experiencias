@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="pt">
+<meta charset="UTF-8">
+<head>
+
+    <title>
+        {% block title %} {{ user_post.title }} {% endblock %}
+    </title>
+
+</head>
+<body>
+{% block body %}
+    <div class="container d-flex justify-content-center">
+    <div class="col-md-9">
+    <div class="post-maximized ">
+        <div class="d-flex justify-content-center">
+            <img class="img-responsive " src="{{ user_post.img }}">
+        </div>
+        <div class="caption-full">
+            <h4><strong>{{ user_post.title }}</strong></h4>
+            <p>{{ user_post.text }}</p>
+            <p class="d-flex justify-content-end">
+                <em>Submetido por {{ user_post.user_name }} na data {{ user_post.pub_data }}</em>
+            </p>
+            <div class="d-flex justify-content-end">
+                {% if user.is_superuser or user.username is user_post.user_name %}
+                    <form action="{% url 'experiencias:deletepost' user_post.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger">Apagar</button>
+                    </form>
+                {% endif %}
+                <div>
+
+                </div>
+            </div>
+            <br>
+            <div>
+                <h4>Comentários</h4>
+                <br>
+                <div>
+                    <form action="{% url 'experiencias:createcomment' user_post.id %}" method="post">
+                        {% csrf_token %}
+                        <textarea class="form-control" name="comment_text" id="comment_text" rows="3"></textarea>
+                        <br>
+                        <div class="d-flex justify-content-end">
+                            <input type="submit" class="btn btn-exp" value="Comentar">
+                        </div>
+                    </form>
+                </div>
+                <hr>
+                <div>
+                    {% for comment in user_post.usercomment_set.all %}
+
+                        <p>{{ comment.text }}<p>
+                        <p class="d-flex justify-content-end">
+                            <em>Submetido por {{ comment.user_name }} na data {{ comment.pub_data }}</em>
+                        </p>
+                        {% if user.is_superuser or user.username is comment.user_name %}
+                            <div class="d-flex justify-content-end">
+                                <form action="{% url 'experiencias:deletecomment' comment.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger">Apagar</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                        <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
