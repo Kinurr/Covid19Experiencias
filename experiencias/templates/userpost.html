@@ -42,7 +42,7 @@
                 <div>
                     <form action="{% url 'experiencias:createcomment' user_post.id %}" method="post">
                         {% csrf_token %}
-                        <textarea class="form-control" name="comment_text" id="comment_text" rows="3"></textarea>
+                        <textarea class="form-control" name="comment_text" id="comment_text" rows="3" required="true"></textarea>
                         <br>
                         <div class="d-flex justify-content-end">
                             <input type="submit" class="btn btn-exp" value="Comentar">

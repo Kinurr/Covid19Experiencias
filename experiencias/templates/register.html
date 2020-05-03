@@ -23,15 +23,15 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label>Nome de utilizador:</label>
-                    <input type="text" class="form-control" name="user_name" id="user_name" placeholder="Utilizador">
+                    <input type="text" class="form-control" name="user_name" id="user_name" placeholder="Utilizador" required="true">
                 </div>
                 <div class="form-group">
                     <label>Email:</label>
-                    <input type="email" class="form-control" name="email" id="email" placeholder="exemple@exemplo.com">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="exemple@exemplo.com" required="true">
                 </div>
                 <div class="form-group">
                     <label>Palavra Passe</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="p4ssw0rd!">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="p4ssw0rd!" required="true">
                 </div>
                 <br>
                 <div class="d-flex justify-content-end">
