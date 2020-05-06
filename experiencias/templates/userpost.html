@@ -28,8 +28,14 @@
                 {% if user.is_superuser or user.username is user_post.user_name %}
                     <form action="{% url 'experiencias:deletepost' user_post.id %}" method="post">
                         {% csrf_token %}
-                        <button class="btn btn-danger">Apagar</button>
+                        <button class="btn btn-danger" id="apagarpost">Apagar</button>
                     </form>
+
+                <div class="d-flex justify-content-end editar">
+                    <a type="button" class="btn btn-warning" style="" href="{% url 'experiencias:editpost' user_post.id %}">Editar</a>
+                </div>
+
+
                 {% endif %}
                 <div>
 
@@ -51,8 +57,9 @@
                 </div>
                 <hr>
                 <div>
-                    {% for comment in user_post.usercomment_set.all %}
+                    {% for comment in user_post.usercomment_set.all reversed %}
 
+                    <div id="comentario{{ comment.id }}">
                         <p>{{ comment.text }}<p>
                         <p class="d-flex justify-content-end">
                             <em>Submetido por {{ comment.user_name }} na data {{ comment.pub_data }}</em>
@@ -64,8 +71,11 @@
                                     <button class="btn btn-danger">Apagar</button>
                                 </form>
                             </div>
+
+
                         {% endif %}
                         <hr>
+                    </div>
                     {% endfor %}
                 </div>
             </div>

@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.conf import settings
+import time
 
 
 def index(request):
@@ -85,7 +86,28 @@ def createpost(request):
     return HttpResponseRedirect(reverse('experiencias:index'))
 
 
+def editpost(request, user_post_id):
+    user_post = UserPost.objects.get(id=user_post_id)
+    context = {'user_post': user_post}
+    return render(request, 'editpost.html', context);
+
+def editLogicPost(request, user_post_id):
+    post_title = request.POST['title']
+    post_text = request.POST['text']
+    post_img = request.POST['img']
+    # Restrict to authenticated users
+    if not request.user.is_authenticated:
+        return HttpResponse('<h1>Não estás logado...</h1>')
+    user_post = UserPost.objects.get(id=user_post_id)
+    user_post.text = post_text
+    user_post.title = post_title
+    user_post.img = post_img
+    user_post.save()
+    return HttpResponseRedirect('/experiencias/' + str(user_post.id))
+
+
 def deletepost(request, user_post_id):
+    time.sleep(1)
     user_post = UserPost.objects.get(id=user_post_id)
     # Restrict either superuser or post author
     if request.user.is_superuser or request.user.username is user_post.user_name:
@@ -109,6 +131,7 @@ def createcomment(request, user_post_id):
 
 
 def deletecomment(request, user_comment_id):
+    time.sleep(1)
     user_comment = UserComment.objects.get(id=user_comment_id)
     user_post_id = user_comment.user_post_id
     # Restrict either superuser or post author

@@ -15,4 +15,6 @@ urlpatterns = [
     url(r'^(?P<user_post_id>[0-9]+)/createcomment/$', views.createcomment, name='createcomment'),
     url(r'^(?P<user_comment_id>[0-9]+)/deletecomment/$', views.deletecomment, name='deletecomment'),
     url(r'^deletepost/(?P<user_post_id>[0-9]+)/$', views.deletepost, name='deletepost'),
+    url(r'^(?P<user_post_id>[0-9]+)/editpost/$', views.editpost, name='editpost'),
+    url(r'^(?P<user_post_id>[0-9]+)/editLogicPost/$', views.editLogicPost, name='editLogicPost'),
 ]
