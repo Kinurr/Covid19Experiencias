@@ -80,3 +80,25 @@ body {
 .editar {
     margin-left: 10px;
 }
+
+#selected_type {
+    background: #A6B1E1;
+    border-style: none;
+    height: 38px;
+}
+
+#showAll {
+    text-decoration: none;
+}
+
+#showAll {
+    background-color: #A6B1E1;
+    border: none;
+    margin-left: 15px;
+    height: 38px;
+}
+
+#about_us_btn {
+    padding-bottom: 10px;
+    text-decoration: none;
+}

@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt">
-<meta charset="UTF-8">
 <head>
     {% block title %} Experiências - Índice {% endblock %}
 </head>
@@ -10,9 +7,27 @@
 {% block body %}
     <br>
     <div class="container">
-        <div class="d-flex justify-content-end">
-            <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar
-                Experiência</a>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+                 <form action="{% url 'experiencias:index' %}" method="post">
+                    {% csrf_token %}
+                     <select class="btn btn-secondary dropdown-toggle" id="selected_type" name="selected_type" onchange="form.submit();">
+                         <option value="" disabled selected hidden>Ordenar Posts</option>
+                         <option class="dropOption" value="votes">Por Votos</option>
+                         <option class="dropOption" value="date">Por Data</option>
+                    </select>
+                </form>
+                <div>
+                    <form action="{% url 'experiencias:showAll' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary" id="showAll" name="showAll" value="mostrar todos"
+                            data-toggle="tooltip" data-placement="top"
+                            title="Atenção: esta ação vai mostrar todos os posts e poderá ser demorada">Mostrar Tudo
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar Experiência</a>
         </div>
         <div class="row text-center" style="display:flex; flex-wrap: wrap;">
             {% for user_post in user_post_list %}
@@ -25,6 +40,10 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
+        <div class="d-flex justify-content-end">
+            <a type="button" class="btn btn-link" id="about_us_btn" href="{% url 'experiencias:aboutUs' %}">About Us</a>
+            <br>
         </div>
     </div>
 {% endblock %}

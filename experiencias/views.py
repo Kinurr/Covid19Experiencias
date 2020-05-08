@@ -15,7 +15,18 @@ import time
 
 
 def index(request):
-    user_post_list = UserPost.objects.order_by('-score')
+    if request.method == 'POST':
+        if request.POST['selected_type'] == "date":
+            user_post_list = UserPost.objects.order_by('-pub_data')[:24]
+        if request.POST['selected_type'] == "votes":
+            user_post_list = UserPost.objects.order_by('-score')[:24]
+    else:
+        user_post_list = UserPost.objects.order_by('-score')[:24]
+    context = {'user_post_list': user_post_list}
+    return render(request, 'index.html', context)
+
+def showAll(request):
+    user_post_list = UserPost.objects.order_by('-pub_data')
     context = {'user_post_list': user_post_list}
     return render(request, 'index.html', context)
 
@@ -28,7 +39,7 @@ def userpost(request, user_post_id):
 
 # Register logic
 def register(request):
-    return render(request, 'register.html');
+    return render(request, 'register.html')
 
 
 def registeruser(request):
@@ -148,3 +159,6 @@ def sendmail():
               settings.EMAIL_HOST_USER,
               ['josefigueiredo2001@hotmail.com'],
               fail_silently=False)
+
+def aboutUs(request):
+    return render(request, 'aboutUs.html')
