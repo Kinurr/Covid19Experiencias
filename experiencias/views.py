@@ -25,6 +25,7 @@ def index(request):
     context = {'user_post_list': user_post_list}
     return render(request, 'index.html', context)
 
+
 def showAll(request):
     user_post_list = UserPost.objects.order_by('-pub_data')
     context = {'user_post_list': user_post_list}
@@ -38,7 +39,7 @@ def userpost(request, user_post_id):
 
 
 # Register logic
-#def register(request):
+# def register(request):
 #    return render(request, 'register.html')
 
 def register(request, context=None):
@@ -49,21 +50,24 @@ def register(request, context=None):
     return render(request, 'register.html', {'message': msg})
 
 
-
 def registeruser(request):
     user_name = request.POST['user_name']
     user_email = request.POST['email']
     user_pass = request.POST['password']
-    check_user = authenticate(username=user_name,
-                        password=user_pass)
-    check_mail = User.objects.filter(email = user_email)
-    if check_user is None and check_mail is None:
+    check_user = User.objects.filter(username=user_name)
+    print(check_user)
+    ##############################################################################################################
+    check_mail = User.objects.filter(email=user_email)
+    if check_user is None and len(check_mail) == 0:
         user = User.objects.create_user(user_name, user_email, user_pass)
         user.save()
         login(request, user)
         return HttpResponseRedirect(reverse('experiencias:index'))
     else:
-        msg = "Erro: UserName ou Password já atribuídos"
+        if check_user is not None:
+            msg = "Erro: UserName já atribuído"
+        if len(check_mail) > 0:
+            msg = "Erro: e-mail já atribuído"
         context = {'msg': msg}
         return render(request, 'register.html', context)
 
@@ -86,7 +90,7 @@ def loginuser(request):
         login(request, user)
         return HttpResponseRedirect(reverse('experiencias:index'))
     else:
-        msg = "Erro: a password não corresponde ao username"
+        msg = "Erro: credenciais inválidas"
         context = {'msg': msg}
         return render(request, 'login.html', context)
 
@@ -119,6 +123,7 @@ def editpost(request, user_post_id):
     user_post = UserPost.objects.get(id=user_post_id)
     context = {'user_post': user_post}
     return render(request, 'editpost.html', context);
+
 
 def editLogicPost(request, user_post_id):
     post_title = request.POST['title']
@@ -177,6 +182,7 @@ def sendmail():
               settings.EMAIL_HOST_USER,
               ['josefigueiredo2001@hotmail.com'],
               fail_silently=False)
+
 
 def aboutUs(request):
     return render(request, 'aboutUs.html')

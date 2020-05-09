@@ -98,7 +98,7 @@ body {
     height: 38px;
 }
 
-#about_us_btn {
-    padding-bottom: 10px;
-    text-decoration: none;
+#logoutButton {
+    padding: 0px;
+    margin: 0px;
 }

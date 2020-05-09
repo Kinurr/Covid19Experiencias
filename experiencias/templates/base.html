@@ -45,11 +45,14 @@
             <div class="">
                 {% if user.is_authenticated %}
                     <em class="mr-sm-2 align-middle">Bem-vindo {{ user.username }}!</em>
-                    <a class="mr-sm-2 btn" href="{% url 'experiencias:logoutuser' %}">Logout</a>
+                    <a class="mr-sm-2 btn" id="logoutButton" href="{% url 'experiencias:logoutuser' %}">Logout</a>
                 {% else %}
                     <a class="mr-sm-2 btn" href="{% url 'experiencias:register' %}">Register</a>
                     <a class="mr-sm-2 btn" href="{% url 'experiencias:userlogin' %}">Login</a>
                 {% endif %}
+                <div class="mr-sm-2 btn">
+                    <a type="button" class="btn btn-link" id="about_us_btn" href="{% url 'experiencias:aboutUs' %}">About Us</a>
+                </div>
             </div>
         </nav>
     {% endblock %}
