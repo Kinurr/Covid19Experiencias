@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^(?P<user_post_id>[0-9]+)/editLogicPost/$', views.editLogicPost, name='editLogicPost'),
     url(r'^showAll', views.showAll, name='showAll'),
     url(r'^aboutUs', views.aboutUs, name='aboutUs'),
+    url(r'^activate/(?P<user_id>[0-9]+)/$', views.activate, name='activate'),
+    url(r'^activateuser', views.activateuser, name='activateuser'),
 ]

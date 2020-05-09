@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="pt">
+<meta charset="UTF-8">
+<head>
+
+    <title>
+        {% block title %} Ative A Sua Conta {% endblock %}
+    </title>
+
+</head>
+<body>
+{% block body %}
+    <br>
+    <div class="container d-flex justify-content-center">
+        <div class="w-50">
+            <div class="d-flex justify-content-center">
+                <h2>Ative a Sua Conta, {{ user.username }}</h2>
+            </div>
+            <hr>
+            <form action="{% url 'experiencias:activateuser' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Por favor, insira a sua palavra passe</label>
+                    <input type="password" class="form-control" name="password" id="password" required="true">
+                    <input type="hidden" id="user_name" name="user_name" value="{{ user.username }}">
+                </div>
+                <br>
+                    {% if msg %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ msg }}
+                        </div>
+                    {% endif %}
+                <div class="d-flex justify-content-end">
+                    <input type="submit" class="btn btn-exp" value="Ativar">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
+

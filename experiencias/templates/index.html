@@ -20,14 +20,19 @@
                 <div>
                     <form action="{% url 'experiencias:showAll' %}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-secondary" id="showAll" name="showAll" value="mostrar todos"
+                        <button type="submit" class="btn btn-exp" id="showAll" name="showAll" value="mostrar todos"
                             data-toggle="tooltip" data-placement="top"
                             title="Atenção: esta ação vai carregar todos os posts e poderá ser demorada">Carregar todos os Posts
                         </button>
                     </form>
                 </div>
             </div>
-            <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar Experiência</a>
+            {% if user.is_authenticated %}
+                <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar Experiência</a>
+            {% else %}
+                <a type="button" class="btn btn-exp disabled" style="" aria-disabled="true" href="{% url 'experiencias:makepost' %}" >Contar Experiência
+                </a>
+            {% endif %}
         </div>
         <div class="row text-center" id="allContent" style="display:flex; flex-wrap: wrap;">
             {% for user_post in user_post_list %}

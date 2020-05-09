@@ -45,6 +45,7 @@
             <div>
                 <h4>Comentários</h4>
                 <br>
+            {% if user.is_authenticated %}
                 <div>
                     <form action="{% url 'experiencias:createcomment' user_post.id %}" method="post">
                         {% csrf_token %}
@@ -56,6 +57,7 @@
                     </form>
                 </div>
                 <hr>
+            {% endif %}
                 <div>
                     {% for comment in user_post.usercomment_set.all reversed %}
 
