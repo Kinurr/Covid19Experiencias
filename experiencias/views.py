@@ -39,8 +39,6 @@ def userpost(request, user_post_id):
 
 
 # Register logic
-# def register(request):
-#    return render(request, 'register.html')
 
 def register(request, context=None):
     if context is None:
@@ -55,12 +53,14 @@ def registeruser(request):
     user_email = request.POST['email']
     user_pass = request.POST['password']
     check_user = User.objects.filter(username=user_name)
-    print(check_user)
+    print(len(check_user))
     ##############################################################################################################
     check_mail = User.objects.filter(email=user_email)
-    if check_user is None and len(check_mail) == 0:
+    if len(check_user) == 0 and len(check_mail) == 0:
         user = User.objects.create_user(user_name, user_email, user_pass)
+        user.last_name = 'i'
         user.save()
+        sendactivationmail(user.email, user.username, user.id)
         login(request, user)
         return HttpResponseRedirect(reverse('experiencias:index'))
     else:
@@ -86,11 +86,15 @@ def loginuser(request):
     user_pass = request.POST['password']
     user = authenticate(username=user_name,
                         password=user_pass)
-    if user is not None:
+    account_activated = (user.last_name == 'a')
+    if user is not None and account_activated:
         login(request, user)
         return HttpResponseRedirect(reverse('experiencias:index'))
     else:
-        msg = "Erro: credenciais inválidas"
+        if not account_activated:
+            msg = "Erro: A sua conta ainda não está ativa"
+        else:
+            msg = "Erro: credenciais inválidas"
         context = {'msg': msg}
         return render(request, 'login.html', context)
 
@@ -176,13 +180,44 @@ def deletecomment(request, user_comment_id):
         return render(request, 'denied.html')
 
 
-def sendmail():
-    send_mail('DJANGO MAIL TEST',
-              'DJANGO MESSAGE TEST',
+def sendactivationmail(destination, user_name, user_id):
+    link = 'http://localhost:8000/experiencias/activate/' + str(user_id) + '/'
+    send_mail('Ative a sua conta',
+              'Olá ' + user_name + ', benvindo/a ao Experiências! Por favor clique no seguinte link para ativar a sua conta: ' + link,
               settings.EMAIL_HOST_USER,
-              ['josefigueiredo2001@hotmail.com'],
+              [destination],
+              fail_silently=False)
+
+
+def sendconfirmationmail(destination, user_name):
+    send_mail('Conta ativada com sucesso',
+              'Olá ' + user_name + ', a sua conta foi ativada com sucesso!',
+              settings.EMAIL_HOST_USER,
+              [destination],
               fail_silently=False)
 
 
 def aboutUs(request):
     return render(request, 'aboutUs.html')
+
+
+def activate(request, user_id):
+    user = User.objects.get(id=user_id)
+    return render(request, 'activate.html', {'user': user})
+
+
+def activateuser(request):
+    user_pass = request.POST['password']
+    user_name = request.POST['user_name']
+    user = authenticate(username=user_name, password=user_pass)
+    if user is not None:
+        user.last_name = 'a'
+        user.save()
+        login(request, user)
+        sendconfirmationmail(user.email, user.username)
+        return HttpResponseRedirect(reverse('experiencias:index'))
+    else:
+        msg = "Erro: password incorreta"
+        context = {'msg': msg, 'user': User.objects.get(username=user_name)}
+        return render(request, 'activate.html', context)
+    return HttpResponseRedirect(reverse('experiencias:index'))
