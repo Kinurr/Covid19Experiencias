@@ -14,9 +14,9 @@
 {% block body %}
     <br>
     <div class="container d-flex justify-content-center">
-        <div class="col-s">
+        <div class="w-50">
             <div class="d-flex justify-content-center">
-                <h2>{{ message }}</h2>
+                <h2>Efetue Login</h2>
             </div>
             <hr>
             <form action="{% url 'experiencias:loginuser' %}" method="post">
@@ -30,6 +30,11 @@
                     <input type="password" class="form-control" name="password" id="password" required="true">
                 </div>
                 <br>
+                    {% if msg %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ msg }}
+                        </div>
+                    {% endif %}
                 <div class="d-flex justify-content-end">
                     <input type="submit" class="btn btn-exp" value="Login">
                 </div>

@@ -38,18 +38,34 @@ def userpost(request, user_post_id):
 
 
 # Register logic
-def register(request):
-    return render(request, 'register.html')
+#def register(request):
+#    return render(request, 'register.html')
+
+def register(request, context=None):
+    if context is None:
+        msg = 'Efetue Login'
+    else:
+        msg = context.message
+    return render(request, 'register.html', {'message': msg})
+
 
 
 def registeruser(request):
     user_name = request.POST['user_name']
     user_email = request.POST['email']
     user_pass = request.POST['password']
-    user = User.objects.create_user(user_name, user_email, user_pass)
-    user.save()
-    login(request, user)
-    return HttpResponseRedirect(reverse('experiencias:index'))
+    check_user = authenticate(username=user_name,
+                        password=user_pass)
+    check_mail = User.objects.filter(email = user_email)
+    if check_user is None and check_mail is None:
+        user = User.objects.create_user(user_name, user_email, user_pass)
+        user.save()
+        login(request, user)
+        return HttpResponseRedirect(reverse('experiencias:index'))
+    else:
+        msg = "Erro: UserName ou Password já atribuídos"
+        context = {'msg': msg}
+        return render(request, 'register.html', context)
 
 
 # Session logic
@@ -70,7 +86,9 @@ def loginuser(request):
         login(request, user)
         return HttpResponseRedirect(reverse('experiencias:index'))
     else:
-        return HttpResponse('<h1>User não existe...!</h1> <a href="localhost:8000/login">Ir para a página do login</a>')
+        msg = "Erro: a password não corresponde ao username"
+        context = {'msg': msg}
+        return render(request, 'login.html', context)
 
 
 def logoutuser(request):
