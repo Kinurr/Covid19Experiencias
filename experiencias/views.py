@@ -17,11 +17,11 @@ import time
 def index(request):
     if request.method == 'POST':
         if request.POST['selected_type'] == "date":
-            user_post_list = UserPost.objects.order_by('-pub_data')[:24]
+            user_post_list = UserPost.objects.order_by('-pub_data')[:60]
         if request.POST['selected_type'] == "votes":
-            user_post_list = UserPost.objects.order_by('-score')[:24]
+            user_post_list = UserPost.objects.order_by('-score')[:60]
     else:
-        user_post_list = UserPost.objects.order_by('-score')[:24]
+        user_post_list = UserPost.objects.order_by('-score')[:60]
     context = {'user_post_list': user_post_list}
     return render(request, 'index.html', context)
 
