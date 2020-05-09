@@ -30,7 +30,8 @@
             {% if user.is_authenticated %}
                 <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar Experiência</a>
             {% else %}
-                <a type="button" class="btn btn-exp disabled" style="" aria-disabled="true" href="{% url 'experiencias:makepost' %}" >Contar Experiência</a>
+                <a type="button" class="btn btn-exp disabled" style="" aria-disabled="true" href="{% url 'experiencias:makepost' %}" >Contar Experiência
+                </a>
             {% endif %}
         </div>
         <div class="row text-center" style="display:flex; flex-wrap: wrap;">
