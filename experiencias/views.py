@@ -61,8 +61,8 @@ def registeruser(request):
         user.last_name = 'i'
         user.save()
         sendactivationmail(user.email, user.username, user.id)
-        login(request, user)
-        return HttpResponseRedirect(reverse('experiencias:index'))
+        msg = 'Por favor, verifique o seu email. Deverá ter recebido o link para ativação da sua conta.'
+        return render(request, 'login.html', {'msg': msg})
     else:
         if check_user is not None:
             msg = "Erro: UserName já atribuído"
