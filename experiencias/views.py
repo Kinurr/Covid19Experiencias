@@ -102,7 +102,7 @@ def logoutuser(request):
 
 # Post logic
 def makepost(request):
-    return render(request, 'makepost.html');
+    return render(request, 'makepost.html')
 
 
 def createpost(request):
@@ -122,7 +122,7 @@ def createpost(request):
 def editpost(request, user_post_id):
     user_post = UserPost.objects.get(id=user_post_id)
     context = {'user_post': user_post}
-    return render(request, 'editpost.html', context);
+    return render(request, 'editpost.html', context)
 
 
 def editLogicPost(request, user_post_id):
@@ -148,14 +148,16 @@ def deletepost(request, user_post_id):
         user_post.delete()
         return HttpResponseRedirect(reverse('experiencias:index'))
     else:
-        return render(request, 'denied.html')
+        msg = 'Não tem permissões para essa acção!'
+        return render(request, 'login.html', {'msg': msg})
 
 
 # Comment making logic
 def createcomment(request, user_post_id):
     # Restrict to authenticated users
     if not request.user.is_authenticated:
-        return render(request, 'denied.html')
+        msg = 'É necessário o Login para fazer comentários!'
+        return render(request, 'login.html', {'msg': msg})
     comment_text = request.POST['comment_text']
     user_post = UserPost.objects.get(id=user_post_id)
     # Comment create in db
@@ -173,7 +175,8 @@ def deletecomment(request, user_comment_id):
         user_comment.delete()
         return HttpResponseRedirect('/experiencias/' + str(user_post_id))
     else:
-        return render(request, 'denied.html')
+        msg = 'Não tem permissões para essa ação!'
+        return render(request, 'login.html', {'msg': msg})
 
 
 def sendmail():
