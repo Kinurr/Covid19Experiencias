@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.utils import timezone
 from django.urls import reverse
-from .models import UserPost, UserComment
+from .models import UserPost, UserComment, UserVote
 import csv
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -165,7 +165,8 @@ def createcomment(request, user_post_id):
     comment_text = request.POST['comment_text']
     user_post = UserPost.objects.get(id=user_post_id)
     # Comment create in db
-    user_post.usercomment_set.create(user_name=request.user.username, text=comment_text, pub_data=timezone.now())
+    user_post.usercomment_set.create(user_name=request.user.username, text=comment_text, pub_data=timezone.now(),
+                                     parent_comment_id=-1)
     user_post.save()
     return HttpResponseRedirect('/experiencias/' + str(user_post.id))
 
@@ -175,7 +176,7 @@ def deletecomment(request, user_comment_id):
     user_comment = UserComment.objects.get(id=user_comment_id)
     user_post_id = user_comment.user_post_id
     # Restrict either superuser or post author
-    if request.user.is_superuser or request.user.username is user_comment.user_name:
+    if request.user.is_superuser or request.user.username == user_comment.user_name:
         user_comment.delete()
         return HttpResponseRedirect('/experiencias/' + str(user_post_id))
     else:
@@ -224,3 +225,73 @@ def activateuser(request):
         context = {'msg': msg, 'user': User.objects.get(username=user_name)}
         return render(request, 'activate.html', context)
     return HttpResponseRedirect(reverse('experiencias:index'))
+
+
+def reply(request, comment_id):
+    comment = UserComment.objects.get(id=comment_id)
+    context = {'comment': comment}
+    return render(request, 'reply.html', context)
+
+
+def replycomment(request):
+    comment_id = request.POST['comment_id']
+    parent_comment_id = request.POST['parent_comment_id']
+    user_post_id = request.POST['user_post_id']
+    comment_text = request.POST['comment_text']
+
+    print(comment_id, parent_comment_id, user_post_id, comment_text)
+    print(parent_comment_id == str(-1))
+
+    if parent_comment_id == str(-1):
+        final_parent_id = comment_id
+    else:
+        final_parent_id = parent_comment_id
+
+    # Restrict to authenticated users
+    if not request.user.is_authenticated:
+        msg = 'É necessário o Login para fazer comentários!'
+        return render(request, 'login.html', {'msg': msg})
+    user_post = UserPost.objects.get(id=user_post_id)
+    # Comment create in db
+    user_post.usercomment_set.create(user_name=request.user.username, text=comment_text, pub_data=timezone.now(),
+                                     parent_comment_id=final_parent_id)
+    user_post.save()
+    return HttpResponseRedirect('/experiencias/' + str(user_post.id))
+
+def vote(request, user_post_id):
+    user1 = request.user
+    post1 = UserPost.objects.get(id=user_post_id)
+
+    if len(UserVote.objects.filter(user=user1).filter(post=post1)) == 0:
+        user_post_update = UserPost.objects.get(id=post1.id)
+        if request.POST['action'] == 'upvote':
+            user_vote = UserVote(user=user1, post=post1, vote_score=1)
+            user_post_update.score = user_post_update.score + 1
+            user_post_update.save()
+        if request.POST['action'] == 'downvote':
+            user_vote = UserVote(user=user1, post=post1, vote_score=-1)
+            user_post_update.score = user_post_update.score - 1
+            user_post_update.save()
+        user_vote.save()
+
+    else:
+        user_post_update = UserPost.objects.get(id=post1.id)
+        user_vote_edit_q = UserVote.objects.filter(user=user1).filter(post=post1)
+        user_vote_edit = user_vote_edit_q[0]
+
+        if request.POST['action'] == 'downvote' and user_vote_edit.vote_score == 1:
+            user_vote_edit.vote_score = -1
+            user_vote_edit.save()
+            user_post_update.score = user_post_update.score - 2
+            user_post_update.save()
+
+        if request.POST['action'] == 'upvote' and user_vote_edit.vote_score == -1:
+            print("dentro do else, dentro do segundo if")
+            user_vote_edit.vote_score = 1
+            user_vote_edit.save()
+            user_post_update.score = user_post_update.score + 2
+            user_post_update.save()
+
+
+    return HttpResponseRedirect('/experiencias/' + str(user_post_id))
+

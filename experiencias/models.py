@@ -18,6 +18,7 @@ class UserComment(models.Model):
     text = models.CharField(max_length=500)
     pub_data = models.DateTimeField('publishing date')
     user_post = models.ForeignKey(UserPost, on_delete=models.CASCADE)
+    parent_comment_id = models.IntegerField(default=None)
 
 
 class UserVote(models.Model):

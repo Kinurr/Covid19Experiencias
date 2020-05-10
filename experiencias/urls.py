@@ -21,4 +21,7 @@ urlpatterns = [
     url(r'^aboutUs', views.aboutUs, name='aboutUs'),
     url(r'^activate/(?P<user_id>[0-9]+)/$', views.activate, name='activate'),
     url(r'^activateuser', views.activateuser, name='activateuser'),
+    url(r'^reply/(?P<comment_id>[0-9]+)/$', views.reply, name='reply'),
+    url(r'^replycomment', views.replycomment, name='replycomment'),
+    url(r'^(?P<user_post_id>[0-9]+)/vote/$', views.vote, name='vote'),
 ]

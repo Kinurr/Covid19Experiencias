@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="pt">
+<meta charset="UTF-8">
+<head>
+
+    <title>
+        {% block title %} Responder A {{ comment.user_name }} {% endblock %}
+    </title>
+
+</head>
+<body>
+{% block body %}
+    <br>
+    <div class="container d-flex justify-content-center">
+        <div class="w-50">
+            <div class="d-flex justify-content-center">
+                <h2>Resposta a {{ comment.user_name }}</h2>
+            </div>
+            <hr>
+            <p>
+                {{ comment.text }}
+            </p>
+            <hr>
+            <form action="{% url 'experiencias:replycomment' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="hidden" id="parent_comment_id" name="parent_comment_id"
+                           value="{{ comment.parent_comment_id }}">
+                    <input type="hidden" id="comment_id" name="comment_id" value="{{ comment.id }}">
+                    <input type="hidden" id="user_post_id" name="user_post_id" value="{{ comment.user_post_id }}">
+                    <label for="exampleFormControlTextarea1">A sua resposta:</label>
+                    <textarea class="form-control" name="comment_text" id="comment_text" rows="3" required="true"></textarea>
+                </div>
+                <br>
+                <div class="d-flex justify-content-end">
+                    <input type="submit" class="btn btn-exp" value="Responder">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
+

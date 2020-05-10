@@ -7,6 +7,13 @@ body {
     font-family: Lato;
 }
 
+.comment {
+    background-color: rgba(160, 160, 160, 0.1);
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
 .navbar {
     background-color: #A6B1E1;
     color: white;
@@ -69,7 +76,13 @@ body {
 .btn-exp {
     background-color: #A6B1E1;
     color: white;
-    margin-bottom: 25px;
+}
+
+.btn-xs {
+  padding: .25rem .4rem;
+  font-size: .675rem;
+  line-height: .5;
+  border-radius: .2rem;
 }
 
 .btn-exp:hover {

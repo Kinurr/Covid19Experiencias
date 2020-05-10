@@ -15,69 +15,122 @@
     <div class="container d-flex justify-content-center">
     <div class="col-md-9">
     <div class="post-maximized ">
-        <div class="d-flex justify-content-center">
-            <img class="img-responsive " src="{{ user_post.img }}">
+        <div class="d-flex justify-content-center ">
+            <img class="col-md-12" src="{{ user_post.img }}">
         </div>
         <div class="caption-full">
-            <h4><strong>{{ user_post.title }}</strong></h4>
-            <p>{{ user_post.text }}</p>
+            <h4>{{ user_post.title }}</h4>
+            <div class="d-flex justify-content-between">
+                <em id="display-votos">Pontuação: {{ user_post.score }}</em>
+                <form action="{% url 'experiencias:vote' user_post.id %}" method="post">
+                    {% csrf_token %}
+                    <button style="margin-top: -20px;" class="btn btn-success" type="submit" name="action"
+                            value="upvote"
+                            {% if user_vote.vote_score == 1 %}
+                            disabled
+                            {% endif %}
+                    ><i class="far fa-thumbs-up"></i></button>
+                    <button style="margin-top: -20px; margin-left: 7px;" class="btn btn-danger" type="submit"
+                            name="action" value="downvote"
+                            {% if user_vote.vote_score == -1 %}
+                            disabled
+                            {% endif %}
+                    ><i class="far fa-thumbs-down"></i></button>
+                </form>
+            </div>
+            <p style="padding-top: 10px;">{{ user_post.text }}</p>
             <p class="d-flex justify-content-end">
-                <em>Submetido por {{ user_post.user_name }} na data {{ user_post.pub_data }}</em>
+                <em>{{ user_post.user_name }} | {{ user_post.pub_data }}</em>
             </p>
             <div class="d-flex justify-content-end">
                 {% if user.is_superuser or user.username is user_post.user_name %}
                     <form action="{% url 'experiencias:deletepost' user_post.id %}" method="post">
                         {% csrf_token %}
-                        <button class="btn btn-danger" id="apagarpost">Apagar</button>
+                        <button class="btn btn-danger" id="apagarpost"><i class="fas fa-trash-alt"></i></button>
                     </form>
-
-                <div class="d-flex justify-content-end editar">
-                    <a type="button" class="btn btn-warning" style="" href="{% url 'experiencias:editpost' user_post.id %}">Editar</a>
-                </div>
-
-
+                    <div class="d-flex justify-content-end editar">
+                        <a type="button" class="btn btn-warning" style=""
+                           href="{% url 'experiencias:editpost' user_post.id %}"><i class="fas fa-edit"></i></a>
+                    </div>
                 {% endif %}
                 <div>
-
                 </div>
             </div>
             <br>
             <div>
                 <h4>Comentários</h4>
                 <br>
-            {% if user.is_authenticated %}
-                <div>
-                    <form action="{% url 'experiencias:createcomment' user_post.id %}" method="post">
-                        {% csrf_token %}
-                        <textarea class="form-control" name="comment_text" id="comment_text" rows="3" required="true"></textarea>
-                        <br>
-                        <div class="d-flex justify-content-end">
-                            <input type="submit" class="btn btn-exp" value="Comentar">
-                        </div>
-                    </form>
-                </div>
-                <hr>
-            {% endif %}
+                {% if user.is_authenticated %}
+                    <div>
+                        <form action="{% url 'experiencias:createcomment' user_post.id %}" method="post">
+                            {% csrf_token %}
+                            <textarea class="form-control" name="comment_text" id="comment_text" rows="3"
+                                      required="true"></textarea>
+                            <br>
+                            <div class="d-flex justify-content-end">
+                                <input type="submit" class="btn btn-exp" value="Comentar">
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                {% endif %}
                 <div>
                     {% for comment in user_post.usercomment_set.all reversed %}
+                        {% if comment.parent_comment_id is -1 %}
+                            <div class="comment" id="comentario{{ comment.id }}">
+                                <p class="d-flex justify-content-end">
+                                    <em style="padding-right: 10px; color: gray">{{ comment.user_name }}
+                                        | {{ comment.pub_data }}</em>
+                                </p>
+                                <p style="margin-top: -10px; margin-bottom: -20px;">{{ comment.text }}<p>
 
-                    <div id="comentario{{ comment.id }}">
-                        <p>{{ comment.text }}<p>
-                        <p class="d-flex justify-content-end">
-                            <em>Submetido por {{ comment.user_name }} na data {{ comment.pub_data }}</em>
-                        </p>
-                        {% if user.is_superuser or user.username is comment.user_name %}
-                            <div class="d-flex justify-content-end">
-                                <form action="{% url 'experiencias:deletecomment' comment.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="btn btn-danger">Apagar</button>
-                                </form>
+                                <div class="d-flex justify-content-end"
+                                     style="padding-top: 20px; margin-bottom: px;">
+                                    <form>
+                                        <a type="button" class="btn btn-exp btn-sm"
+                                           href="{% url 'experiencias:reply' comment.id %}"><i
+                                                class="fas fa-reply"></i></a>
+                                    </form>
+                                    {% if user.is_superuser or user.username == comment.user_name %}
+                                        <form style="margin-left: 5px;"
+                                              action="{% url 'experiencias:deletecomment' comment.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button class="btn btn-sm btn-danger"><i
+                                                    class="fas fa-trash-alt"></i></button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                                {% for comment_reply in user_post.usercomment_set.all %}
+                                    {% if comment_reply.parent_comment_id is comment.id %}
+                                        <hr style="color: rgba(0,0,0,0.54); margin-left: 30px">
+                                        <p class="d-flex justify-content-end">
+                                            <em style="padding-right: 10px; margin-bottom: 20px; color: gray; font-size: 14.5px;">{{ comment_reply.user_name }}
+                                                | Em resposta a {{ comment.user_name }}
+                                                | {{ comment_reply.pub_data }}</em>
+                                        </p>
+                                        <p style="margin-top: -30px; margin-bottom: -20px; margin-left: 40px; color: dimgray; font-size: 14.5px;">
+                                        {{ comment_reply.text }}<p>
+                                        <div class="d-flex justify-content-end"
+                                             style="padding-top: 20px; margin-bottom: -px;">
+                                            <form>
+                                                <a type="button" class="btn btn-exp btn-xs"
+                                                   href="{% url 'experiencias:reply' comment_reply.id %}"><i
+                                                        class="fas fa-reply"></i></a>
+                                            </form>
+                                            {% if user.is_superuser or user.username == comment_reply.user_name %}
+                                                <form style="margin-left: 5px;"
+                                                      action="{% url 'experiencias:deletecomment' comment_reply.id %}"
+                                                      method="post">
+                                                    {% csrf_token %}
+                                                    <button class="btn btn-danger btn-xs"><i
+                                                            class="fas fa-trash-alt"></i></button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
-
-
                         {% endif %}
-                        <hr>
-                    </div>
                     {% endfor %}
                 </div>
             </div>
