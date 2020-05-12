@@ -23,21 +23,27 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label>Nome de utilizador:</label>
-                    <input type="text" class="form-control" name="user_name" id="user_name" placeholder="Utilizador" required="true">
+                    <input type="text" class="form-control" name="user_name" id="user_name" placeholder="Utilizador"
+                           required="true">
                 </div>
                 <div class="form-group">
                     <label>Email:</label>
-                    <input type="email" class="form-control" name="email" id="email" placeholder="exemple@exemplo.com" required="true">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="exemple@exemplo.com"
+                           required="true">
                 </div>
                 <div class="form-group">
                     <label>Palavra Passe</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="p4ssw0rd!" required="true">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="p4ssw0rd!"
+                           required="true">
                 </div>
                 {% if msg %}
                     <div class="alert alert-danger" role="alert">
                         {{ msg }}
                     </div>
                 {% endif %}
+                <div class="d-flex justify-content-start">
+                    <p>Já tem uma conta? Entre <a href="{% url 'experiencias:userlogin' %}">aqui</a>.</p>
+                </div>
                 <div class="d-flex justify-content-end">
                     <input type="submit" class="btn btn-exp" value="Registar">
                 </div>

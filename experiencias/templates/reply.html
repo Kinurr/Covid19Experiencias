@@ -39,6 +39,7 @@
                            value="{{ comment.parent_comment_id }}">
                     <input type="hidden" id="comment_id" name="comment_id" value="{{ comment.id }}">
                     <input type="hidden" id="user_post_id" name="user_post_id" value="{{ comment.user_post_id }}">
+                    <input type="hidden" id="reply_to" name="reply_to" value="{{ comment.user_name }}">
                     <label for="exampleFormControlTextarea1">A sua resposta:</label>
                     <textarea class="form-control" name="comment_text" id="comment_text" rows="3" required="true"></textarea>
                 </div>

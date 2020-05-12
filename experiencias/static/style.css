@@ -126,3 +126,22 @@ body {
 .page-link {
     background-color: #A6B1E1;
 }
+
+#display-votos {
+    padding-top: 7px;
+    padding-right: 20px;
+}
+
+.profile-link {
+    color: dimgrey;
+}
+
+.profile-link:hover {
+    color: darkgrey;
+    text-decoration: none;
+}
+
+.profile-link-comment:hover {
+    color: dimgray;
+    text-decoration: none;
+}

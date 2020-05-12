@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <head>
 
-    <link rel="icon" href="{% static 'arco-iris.jpg' %}">
+    <link rel="icon" style="fill: white" href="{% static 'hands-helping-solid.svg' %}">
 
     {# Bootstrap Stuff #}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -13,8 +13,8 @@
           crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-3.5.0.js"
-        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
-        crossorigin="anonymous"></script>
+            integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
@@ -38,28 +38,49 @@
 </head>
 <body>
 
-    {% block navbar %}
-        <nav class="navbar navbar-default sticky-top">
-            <a class="navbar-brand btn" href="/experiencias/"><i class="fa fa-fw fa-people-arrows"> </i> <span class="brand"
-                                                                                                           style="padding-left: 10px">COVID-19 | Experiências</span></a>
-            <div class="">
-                {% if user.is_authenticated %}
-                    <em class="mr-sm-2 align-middle">Bem-vindo {{ user.username }}!</em>
-                    <a class="mr-sm-2 btn" id="logoutButton" href="{% url 'experiencias:logoutuser' %}">Logout</a>
-                {% else %}
-                    <a class="mr-sm-2 btn" href="{% url 'experiencias:register' %}">Registo</a>
-                    <a class="mr-sm-2 btn" href="{% url 'experiencias:userlogin' %}">Login</a>
-                {% endif %}
-                <div class="mr-sm-2 btn">
-                    <a type="button" class="btn btn-link btn-outline-light" id="about_us_btn" href="{% url 'experiencias:aboutUs' %}">Sobre Nós</a>
-                </div>
+{% block navbar %}
+    <nav class="navbar navbar-default sticky-top">
+        <a class="navbar-brand btn" href="/experiencias/"><i class="fas fa-hands-helping"> </i> <span class="brand"
+                                                                                                      style="padding-left: 10px">COVID-19 | Experiências</span></a>
+        <div class="">
+            {% if user.is_authenticated %}
+                <a class="btn" href="{% url 'experiencias:userprofile' user.id %}" data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="Visitar a sua página de perfil"><em
+                        class="mr-sm-2 align-middle">Bem-vindo(a) {{ user.username }}!</em></a>
+                <a class="mr-sm-2 btn" id="logoutButton" href="{% url 'experiencias:logoutuser' %}">Logout</a>
+            {% else %}
+                <a class="mr-sm-2 btn" href="{% url 'experiencias:register' %}">Registo</a>
+                <a class="mr-sm-2 btn" href="{% url 'experiencias:userlogin' %}">Login</a>
+            {% endif %}
+            <div class="mr-sm-2 btn">
+                <a type="button" class="btn btn-link btn-outline-light" id="about_us_btn"
+                   href="{% url 'experiencias:aboutUs' %}">Sobre Nós</a>
             </div>
-        </nav>
-    {% endblock %}
+        </div>
+    </nav>
+{% endblock %}
 
-    {% block body %}
-        <p>This is the body</p>
-    {% endblock %}
-
+{% block body %}
+    <p>This is the body</p>
+{% endblock %}
+<br>
 </body>
+
+{% block footer %}
+<footer id="footer" style="color: dimgrey;">
+    <div class="container d-flex justify-content-center">
+        <p>António Rodrigo | Catarina Lopes | José Figueiredo</p>
+    </div>
+    <div class="container d-flex justify-content-center">
+        <p>2020</p>
+    </div>
+    <div class="container d-flex justify-content-center">
+        <a href="https://www.iscte-iul.pt/" target="_blank">
+            <img src="{% static 'logo_iscte_detailed.svg' %}">
+        </a>
+    </div>
+    <br>
+</footer>
+{% endblock %}
 </html>

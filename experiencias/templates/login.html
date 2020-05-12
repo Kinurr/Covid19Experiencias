@@ -29,11 +29,19 @@
                     <label>Palavra Passe</label>
                     <input type="password" class="form-control" name="password" id="password" required="true">
                 </div>
-                    {% if msg %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ msg }}
-                        </div>
-                    {% endif %}
+                {% if msg %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ msg }}
+                    </div>
+                {% endif %}
+                {% if email_msg %}
+                    <div class="alert alert alert-info" role="alert">
+                        {{ email_msg }}
+                    </div>
+                {% endif %}
+                <div class="d-flex justify-content-start">
+                    <p>Não tem uma conta? Crie uma <a href="{% url 'experiencias:register' %}">aqui</a>.</p>
+                </div>
                 <div class="d-flex justify-content-end">
                     <input type="submit" class="btn btn-exp" value="Login">
                 </div>

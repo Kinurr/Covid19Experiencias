@@ -6,7 +6,7 @@
 <head>
 
     <title>
-        {% block title %} Editar Experiência {% endblock %}
+        {% block title %} Editar Perfil {% endblock %}
     </title>
 
 </head>
@@ -16,24 +16,18 @@
     <div class="container d-flex justify-content-center">
         <div class="col">
             <div class="d-flex justify-content-center">
-                <h2>Edit a sua experiência</h2>
+                <h2>Editar Perfil</h2>
             </div>
             <hr>
-            <form action="{% url 'experiencias:editLogicPost' user_post.id %}" method="post">
+            <form action="{% url 'experiencias:editLogicProfile' user.id %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label>Título</label>
-                    <input type="text" class="form-control" name="title" id="title" value="{{ user_post.title }}"
-                           required="true">
-                </div>
-                <div class="form-group">
                     <label for="exampleFormControlTextarea1">Descrição</label>
-                    <textarea class="form-control" name="text" id="text" rows="3"
-                              required="true">{{ user_post.text }}</textarea>
+                    <textarea class="form-control" name="text" id="text" rows="3">{{ user_profile.text }}</textarea>
                 </div>
                 <div class="form-group">
                     <label>Imagem</label>
-                    <input type="text" class="form-control" name="img" id="img" value="{{ user_post.img }}">
+                    <input type="text" class="form-control" name="img" id="img" value="{{ user_profile.img }}">
                     <p class="text-justify" style="color: dimgray; padding-top: 10px;">De modo a conservar espaço e
                         reduzir o tempo de processamento dos nossos servidores, pedimos
                         que em vez de fazer o upload direto de uma imagem, forneça o link para a sua imagem hospedada
@@ -42,7 +36,7 @@
                 </div>
                 <br>
                 <div class="d-flex justify-content-end">
-                    <input type="submit" class="btn btn-exp" value="Publicar">
+                    <input type="submit" class="btn btn-exp" value="Atualizar">
                 </div>
             </form>
         </div>

@@ -9,29 +9,35 @@
     <div class="container">
         <div class="d-flex justify-content-between" style="margin-bottom: 25px">
             <div class="d-flex justify-content-start">
-                 <form action="{% url 'experiencias:index' %}" method="post">
+                <form action="{% url 'experiencias:index' %}" method="post">
                     {% csrf_token %}
-                     <select class="btn btn-secondary dropdown-toggle" id="selected_type" name="selected_type" onchange="form.submit();">
-                         <option value="" disabled selected hidden>Ordenar Posts</option>
-                         <option class="dropOption" value="votes">Por Votos</option>
-                         <option class="dropOption" value="date">Por Data</option>
+                    <select class="btn btn-secondary dropdown-toggle" id="selected_type" name="selected_type"
+                            onchange="form.submit();">
+                        <option value="" disabled selected hidden>Ordenar Posts</option>
+                        <option class="dropOption" value="votes">Por Votos</option>
+                        <option class="dropOption" value="date">Por Data</option>
                     </select>
                 </form>
                 <div>
-                    <form action="{% url 'experiencias:showAll' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-exp" id="showAll" name="showAll" value="mostrar todos"
-                            data-toggle="tooltip" data-placement="top"
-                            title="Atenção: esta ação vai carregar todos os posts e poderá ser demorada">Carregar todos os Posts
-                        </button>
-                    </form>
+                    <a type="button" href="{% url 'experiencias:showAll' %}" class="btn btn-exp" id="showAll"
+                       name="showAll" value="mostrar todos"
+                       data-toggle="tooltip" data-placement="top"
+                       title="Atenção: esta ação vai carregar todos os posts e poderá ser demorada">Carregar todos os
+                        Posts
+                    </a>
                 </div>
             </div>
             {% if user.is_authenticated %}
-                <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar Experiência</a>
+                <a type="button" class="btn btn-exp" style="" href="{% url 'experiencias:makepost' %}">Contar
+                    Experiência</a>
             {% else %}
-                <a type="button" class="btn btn-exp disabled" style="" aria-disabled="true" href="{% url 'experiencias:makepost' %}" >Contar Experiência
+                <span data-toggle="tooltip" data-placement="top"
+                      title="Por favor faça login para contar as suas experiências">
+                <a type="button" class="btn btn-exp disabled" style="" aria-disabled="true"
+                   href="{% url 'experiencias:makepost' %}">Contar Experiência
                 </a>
+                </span>
+
             {% endif %}
         </div>
         <div class="row text-center" id="allContent" style="display:flex; flex-wrap: wrap;">
@@ -40,7 +46,15 @@
                     <div class="thumbnail">
                         <img src="{{ user_post.img }}">
                         <div class="caption">
-                            <h4><a class="btn" href="{% url 'experiencias:userpost' user_post.id %}">{{ user_post.title }} <small>({{ user_post.score }})</small></a></h4>
+                            <small>{{ user_post.score }}
+                                {% if user_post.score == 1 %}
+                                    voto
+                                {% else %}
+                                    votos
+                                {% endif %}
+                            </small>
+                            <h4><a class="btn" style="font-size: 20px;"
+                                   href="{% url 'experiencias:userpost' user_post.id %}">{{ user_post.title }}</a></h4>
                         </div>
                     </div>
                 </div>
@@ -52,14 +66,14 @@
 
     <div class="container d-flex justify-content-center">
         <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" id="previous-page" href="javascript:void(0)" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-              </a>
-            </li>
-          </ul>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" id="previous-page" href="javascript:void(0)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+            </ul>
         </nav>
     </div>
 {% endblock %}
